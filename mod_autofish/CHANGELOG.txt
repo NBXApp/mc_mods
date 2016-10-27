@@ -1,0 +1,20 @@
+1.9.4-1.2
+=======
+Update to work on Minecraft/Forge 1.9.4
+
+1.9-1.2
+=======
+Update to work on Minecraft/Forge 1.9 (Thanks Maaiins)
+More reliable technique for detecting fish bite in single player
+
+1.8.9-1.1
+=======
+Update to work on Minecraft 1.8.9. (Thanks SpacyNG)
+
+1.8-1.1
+=======
+Implement a hotkey to reach the AutoFish options screen while in-game.
+
+1.8-1.0
+=======
+Initial release of the AutoFish Forge Mod
