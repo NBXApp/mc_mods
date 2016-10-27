@@ -1,10 +1,12 @@
 # AutoFish Modification for www.mcelf.com
 
-The minecraft server of www.mcelf.com(version-1.9.4) add a new rule to anti-autofish, that is to increase the food consume speed when fishing. So the players may be hungery to die if careless.
+本插件是专门针对www.mcelf.com ，该服务器针对钓鱼之风盛行，增加了一条规则来反制autofish，就是增加食物的消耗速度，粗心的玩家甚至会饿死。
 
-This modified mod add a new function, when a fishing player is hungery, the player will eat the food on the hotbar automatically.
+The minecraft server of www.mcelf.com (version-1.9.4) add a new rule to anti-autofish mod, that is to increase the food consume speed when fishing. Some players may be hungry to die if careless.
 
-For some reason, the mod's package is renamed to pass the administration. And part of source code is hidden for the same reason.
+This modified auto-fish mod is come from FreneticFeline's copy. It adds a new auto-eat function, when a fishing player is hungry, the player will eat the food on the hotbar automatically.
+
+For some reason, the mod's package is renamed to avoid the administration. And part of source code is hidden for the same reason.
 
 Special thanks to FreneticFeline and troyboy50.
 
