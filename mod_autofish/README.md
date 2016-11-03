@@ -2,6 +2,8 @@
 
 本插件是专门针对www.mcelf.com ，该服务器针对钓鱼之风盛行，增加了一条规则来反制autofish，就是增加食物的消耗速度，粗心的玩家甚至会饿死。
 
+新插件主要有如下功能：1、自动钓鱼，2、自动进食，3、防呆（服务器卡比）
+
 The minecraft server of www.mcelf.com (version-1.9.4) add a new rule to anti-autofish mod, that is to increase the food consume speed when fishing. Some players may be hungry to die if careless.
 
 This modified auto-fish mod is come from FreneticFeline's copy. It adds a new auto-eat function, when a fishing player is hungry, the player will eat the food on the hotbar automatically.
