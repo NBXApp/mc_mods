@@ -1,6 +1,13 @@
 buildscript {
     repositories {
-        mavenCentral()
+        //mavenCentral()
+
+	jcenter()
+        maven {
+            name = "sonatype"
+            url = "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
+
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"

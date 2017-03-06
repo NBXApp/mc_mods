@@ -16,10 +16,19 @@ public class ModAutoFish {
     public static Configuration configFile;
     public static boolean config_autofish_enable;
     public static final boolean CONFIG_DEFAULT_AUTOFISH_ENABLE = true;
+    
+    public static boolean config_autostone_enable;
+    public static final boolean CONFIG_DEFAULT_AUTOSTONE_ENABLE = false;
+    
+    public static boolean config_autoadv_enable;
+    public static final boolean CONFIG_DEFAULT_AUTOADV_ENABLE = false;
+    
     public static boolean config_autofish_food_enable;
     public static final boolean CONFIG_DEFAULT_AUTOFISH_FOOD_ENABLE = true;
+    
     public static boolean config_autofish_multirod;
     public static final boolean CONFIG_DEFAULT_AUTOFISH_MULTIROD = false;
+    
     public static boolean config_autofish_preventBreak;
     public static final boolean CONFIG_DEFAULT_AUTOFISH_PREVENTBREAK = false;
     
@@ -45,10 +54,13 @@ public class ModAutoFish {
 
     public static void syncConfig() {
         config_autofish_enable = configFile.getBoolean("自动钓鱼", Configuration.CATEGORY_GENERAL, CONFIG_DEFAULT_AUTOFISH_ENABLE, "自动甩杆，当有鱼上钩时自动收杆");
+        config_autostone_enable = configFile.getBoolean("自动采石", Configuration.CATEGORY_GENERAL, CONFIG_DEFAULT_AUTOSTONE_ENABLE, "自动会动石镐采集石头");
+        config_autoadv_enable = configFile.getBoolean("自动广告", Configuration.CATEGORY_GENERAL, CONFIG_DEFAULT_AUTOADV_ENABLE, "自动广告发布系统");
+        
         config_autofish_food_enable = configFile.getBoolean("边钓边吃", Configuration.CATEGORY_GENERAL, CONFIG_DEFAULT_AUTOFISH_FOOD_ENABLE, "钓鱼时自动进食，专门针对方块帝国。");
         config_autofish_multirod = configFile.getBoolean("多鱼竿替换", Configuration.CATEGORY_GENERAL, CONFIG_DEFAULT_AUTOFISH_MULTIROD, "自动替换备用鱼竿，备用杆需在Hotbar上");
         config_autofish_preventBreak = configFile.getBoolean("鱼竿保护", Configuration.CATEGORY_GENERAL, CONFIG_DEFAULT_AUTOFISH_PREVENTBREAK, "当鱼竿快坏时，停止钓鱼或者更换备用杆");
-        
+         
         if (configFile.hasChanged()) {
             configFile.save();
         }
