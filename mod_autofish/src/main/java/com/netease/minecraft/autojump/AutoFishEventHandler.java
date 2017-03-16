@@ -92,6 +92,8 @@ public class AutoFishEventHandler {
 					if(cur_time > this.nextAdvetist)
 					{
 						this.nextAdvetist = cur_time + ADV_READY_TICK_DELAY;
+						
+						AutoFishLogger.log(Level.INFO, "advertisement index = %d ... ", lastAdVIndex);
 
 						switch(lastAdVIndex){
 						default:
@@ -174,6 +176,12 @@ public class AutoFishEventHandler {
 						{
 							tryUsingPickAxe();
 						}
+						else
+						{
+							stopUsePickAxe();
+							this.lastPickAxe = this.minecraft.theWorld.getTotalWorldTime();
+							pickaxe_enable = false;
+						}
 					}
 				}
 				else
@@ -193,11 +201,27 @@ public class AutoFishEventHandler {
 
 			//!< XXX auto fishing.
 			if (ModAutoFish.config_autofish_enable) {
+				
+//				if(this.minecraft.theWorld.getTotalWorldTime() > 191930L){
+//					AutoFishLogger.log(Level.INFO, "check tick %d", 
+//							this.minecraft.theWorld.getTotalWorldTime());
+//				}
+			
 				if (playerHookInWater() && !isDuringReelDelay()	&& isFishBiting()) {
 					// !< start tick to avoid mutltiple reeling.
 					startReelDelay();
-
-					AutoFishLogger.log(Level.INFO, "player Reeling ...: %d tick", this.minecraft.theWorld.getTotalWorldTime());
+					
+					if(lastCastAt != 0)
+					{
+						long tick = this.minecraft.theWorld.getTotalWorldTime();
+						long diff = tick - lastCastAt;
+						AutoFishLogger.log(Level.INFO, "[2]player Reeling : timestamp = %d, %f seconds", 
+								tick, diff/20.0f/*, this.minecraft.theWorld.getSeed()*/);
+					}else
+					{
+						AutoFishLogger.log(Level.INFO, "[2]player Reeling : timestamp = %d tick", 
+								this.minecraft.theWorld.getTotalWorldTime());
+					}
 					// !< Reel !
 					playerUseRod();
 
@@ -239,7 +263,7 @@ public class AutoFishEventHandler {
 						}
 
 						if (playerCanCast()) {
-							AutoFishLogger.log(Level.INFO, "player Use Rod ...: %d tick", this.minecraft.theWorld.getTotalWorldTime());
+							AutoFishLogger.log(Level.INFO, "[1]player Use Rod : timestamp =  %d", this.minecraft.theWorld.getTotalWorldTime());
 							playerUseRod();
 							lastCastAt = this.minecraft.theWorld.getTotalWorldTime();
 						}
@@ -292,22 +316,40 @@ public class AutoFishEventHandler {
 				{
 					if(lastCastAt != 0)
 					{
-						if(this.minecraft.theWorld.getTotalWorldTime() > this.lastCastAt + 1800 + 100)
+						long cur = this.minecraft.theWorld.getTotalWorldTime();
+						if (cur + 1000 < this.lastCastAt) {
+							//AutoFishLogger.log(Level.INFO, "WARNING: current %d, lastCastAt = %d ...", cur, lastCastAt);
+							cur += 192000L;
+						}
+						
+						//!< 150 seconds??
+						if(cur > this.lastCastAt + 2400 + 100)
 						{
 							AutoFishLogger.log(Level.INFO, "WARNING: player fishing timeout ...");
 							
 							if(playerHookInWater())
 							{
+								AutoFishLogger.log(Level.INFO, "Timeout Recover: start reel ...");
 								// !< start tick to avoid mutltiple reeling.
 								startReelDelay();
 								// !< Reel !
 								playerUseRod();
+								
+								// !< next time to cast fish-rop.
+								scheduleNextCast();
+								
+								lastCastAt = 0;
 							}
-							
-							lastCastAt = 0;
+							else
+							{
+								AutoFishLogger.log(Level.INFO, "Timeout Recover: cast fish-rod ...");
+								playerUseRod();
+								lastCastAt = this.minecraft.theWorld.getTotalWorldTime();
+							}
+
 							return;
 						}
-						else if(this.minecraft.theWorld.getTotalWorldTime() > this.lastCastAt + 100)
+						else if(cur > this.lastCastAt + 100)
 						{
 							if(!playerHookInWater())
 							{
