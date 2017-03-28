@@ -48,17 +48,24 @@ public class AutoFishEventHandler {
 	private static final int MODE_FISH = 1;
 	private static final int MODE_FISH_FOOD = 2;
 
-	public String msg1 = "[广告]本店收购金锭铁锭信标以及泥土，并有大量实用附魔书出售，有意者欢迎光临，/is warp elf9527";
-	public String msg2 = "[广告]本店附魔书主要包括经验修补、精确采集、耐久3，效率4，锋利4，抢夺3等等，品种多多，欢迎光临，/is warp elf9527";
-	public String msg3 = "[广告]本店经营5神弓，6神弓，4神杆，另有末影珍珠烈焰棒粘液球等难获取之物，有意者欢迎光临，/is warp elf9527";
-	public String msg4 = "[广告]本店还没想好广告词，有意者欢迎光临，/is warp elf9527";
-	public String msg5 = "[广告]海底小店，404 Not found，欢迎光临，/is warp elf9527";
-	public String msg6 = "本店收购金锭铁锭信标以及泥土，并有大量实用附魔书出售，有意者欢迎光临，/is warp elf9527";
-	public String msg7 = "本店附魔书主要包括经验修补、精确采集、耐久3，效率4，锋利4，抢夺3等等，品种多多，欢迎光临海底小店，/is warp elf9527";
-	public String msg8 = "本店经营5神弓，6神弓，4神杆，另有末影珍珠烈焰棒粘液球等难获取之物，有意者欢迎光临，/is warp elf9527";
-	public String msg9 = "本店还没想好广告词，有意者欢迎光临，/is warp elf9527";
-	public String msg10 = "本店404 Not found，欢迎光临，/is warp elf9527";
-	public String msg11 = "发多了容易被系统墙，所以我也不知道该打什么广告，欢迎光临海底小店，/is warp elf9527";
+	/*
+	public String msg1 = "[X:0,Z:0,Y:0]本店收购金锭铁锭信标以及泥土木炭，等等,并有大量实用附魔书出售，有意者欢迎光临，/is warp elf9527";
+	public String msg2 = "[X:0,Z:0,Y:0]本店附魔书主要包括经验修补、精确采集、耐久3，效率4，锋利4，抢夺3等等等等，品种多多，欢迎光临，/is warp elf9527";
+	public String msg3 = "[X:0,Z:0,Y:0]本店经营5神弓，6神弓，4神杆，另有末影珍珠烈焰棒粘液球等难获取之物，有意者欢迎光临，/is warp elf9527";
+	public String msg4 = "[X:0,Z:0,Y:0]本店还没想好广告词，有意者欢迎光临，/is warp elf9527";
+	public String msg5 = "[X:0,Z:0,Y:0]海底小店，404 Not found，欢迎光临，/is warp elf9527";
+	public String msg6 = "[X:0,Z:0,Y:0]本店收购金锭铁锭信标以及泥土，并有大量实用附魔书出售，有意者欢迎光临，/is warp elf9527";
+	public String msg7 = "[X:0,Z:0,Y:0]本店附魔书主要包括经验修补、精确采集、耐久3，效率4，锋利4，抢夺3等等，品种多多，欢迎光临海底小店，/is warp elf9527";
+	public String msg8 = "[X:0,Z:0,Y:0]本店经营5神弓，6神弓，4神杆，另有末影珍珠烈焰棒粘液球等难获取之物，有意者欢迎光临，/is warp elf9527";
+	public String msg9 = "[X:0,Z:0,Y:0]本店还没想好广告词，有意者欢迎光临，/is warp elf9527";
+	public String msg10 = "[X:0,Z:0,Y:0]本店404 Not found，欢迎光临，/is warp elf9527";
+	public String msg11 = "[X:0,Z:0,Y:0]发多了容易被系统墙，所以我也不知道该打什么广告，欢迎光临海底小店，/is warp elf9527";
+	*/
+	
+	public String msg1 = "[z:5,x:5,y:5]本岛收购胡萝卜 土豆 泥土 原木 地狱岩 灵魂沙 出售经验修补 精准采集 等各种物资 免费使用满级附魔台 没有的找我【自动广告】";
+	public String msg2 = "[z:5,x:5,y:5]本店分<农作物区> <收购区> <魔法区> <怪物品区> 几大区块 欢迎各位小伙伴来本店购买商品【自动广告】";
+	public String msg3 = "[z:5,x:5,y:5]售.南瓜.胡萝卜.西瓜.4神竿.6神弓, 附魔书便宜卖 恶魔之泪.小麦.萤石.命名牌.凋零头.收购 铁 金 钻石 土 彩色羊毛任务/is warp jacksfather";
+	public String msg4 = "[z:5,x:5,y:5]本店价格实惠，童叟无欺，欢迎光临，/is warp jacksfather";
 	
 	private static final int ADV_READY_TICK_DELAY = 240 * 20; // !< 60*4 seconds.
 	
@@ -87,7 +94,12 @@ public class AutoFishEventHandler {
 				}
 				else
 				{
+					this.minecraft.theWorld.getWorldTime();
 					long cur_time = this.minecraft.theWorld.getTotalWorldTime();
+					
+					if (cur_time < 1000 && this.nextAdvetist >= 192000L) {
+						this.nextAdvetist = cur_time + ADV_READY_TICK_DELAY;
+					}
 					
 					if(cur_time > this.nextAdvetist)
 					{
@@ -112,37 +124,37 @@ public class AutoFishEventHandler {
 							this.minecraft.thePlayer.sendChatMessage(msg4);
 							break;
 							
-						case 4:
-							this.minecraft.thePlayer.sendChatMessage(msg5);
-							break;
-							
-						case 5:
-							this.minecraft.thePlayer.sendChatMessage(msg6);
-							break;
-							
-						case 6:
-							this.minecraft.thePlayer.sendChatMessage(msg7);
-							break;
-							
-						case 7:
-							this.minecraft.thePlayer.sendChatMessage(msg8);
-							break;
-							
-						case 8:
-							this.minecraft.thePlayer.sendChatMessage(msg9);
-							break;
-							
-						case 9:
-							this.minecraft.thePlayer.sendChatMessage(msg10);
-							break;
-							
-						case 10:
-							this.minecraft.thePlayer.sendChatMessage(msg11);
-							break;
+//						case 4:
+//							this.minecraft.thePlayer.sendChatMessage(msg5);
+//							break;
+//							
+//						case 5:
+//							this.minecraft.thePlayer.sendChatMessage(msg6);
+//							break;
+//							
+//						case 6:
+//							this.minecraft.thePlayer.sendChatMessage(msg7);
+//							break;
+//							
+//						case 7:
+//							this.minecraft.thePlayer.sendChatMessage(msg8);
+//							break;
+//							
+//						case 8:
+//							this.minecraft.thePlayer.sendChatMessage(msg9);
+//							break;
+//							
+//						case 9:
+//							this.minecraft.thePlayer.sendChatMessage(msg10);
+//							break;
+//							
+//						case 10:
+//							this.minecraft.thePlayer.sendChatMessage(msg11);
+//							break;
 						}
 						
 						lastAdVIndex ++;
-						if(lastAdVIndex >= 11)
+						if(lastAdVIndex >= 4)
 						{
 							lastAdVIndex = 0;
 						}
@@ -162,6 +174,11 @@ public class AutoFishEventHandler {
 				if(pickaxe_enable)
 				{
 					long cur_pickaxe = this.minecraft.theWorld.getTotalWorldTime();
+					
+					if (cur_pickaxe < 1000 && this.lastPickAxe >= 192000L) {
+						this.lastPickAxe = cur_pickaxe;
+					}
+					
 					if(cur_pickaxe - this.lastPickAxe >= PICKAXE_ACTION_DELAY1)
 					{
 						stopUsePickAxe();
@@ -187,6 +204,10 @@ public class AutoFishEventHandler {
 				else
 				{
 					long cur_pickaxe = this.minecraft.theWorld.getTotalWorldTime();
+					if (cur_pickaxe < 1000 && this.lastPickAxe >= 192000L) {
+						this.lastPickAxe = cur_pickaxe;
+					}
+					
 					if(cur_pickaxe - this.lastPickAxe > PICKAXE_ACTION_DELAY2)
 					{
 						tryToSwitchPickAxe();
