@@ -1,12 +1,19 @@
 buildscript {
     repositories {
         //mavenCentral()
+	//flatDir dirs: '/home/guoping/git'
+	
 
-	jcenter()
+	//jcenter()
         maven {
             name = "sonatype"
             url = "http://maven.aliyun.com/nexus/content/groups/public/"
         }
+
+//        maven {
+//            name = "sonatype"
+ //           url = "http://maven.oschina.net/content/groups/public/"
+ //       }
 
         maven {
             name = "forge"
@@ -24,12 +31,14 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.9.4-1.2"
+version = "1.11.2-1.0"
 group= "com.netease.minecraft.autojump" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "mod_autojump_forge"
 
+//# version = "1.9.4-12.17.0.1976"
 minecraft {
-    version = "1.9.4-12.17.0.1976"
+//1.11.2-13.20.0.2228
+    version = "1.11.2-13.20.0.2228"
     runDir = "eclipse"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -37,7 +46,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20160518"
+    mappings = "snapshot_20170211"
 }
 
 dependencies {

@@ -77,19 +77,19 @@ public class AutoFishEventHandler {
 	public void onClientTickEvent(ClientTickEvent event) {
 		this.minecraft = Minecraft.getMinecraft();
 		
-		if ((!this.minecraft.isGamePaused()) && (this.minecraft.thePlayer != null)) {
-			this.player = this.minecraft.thePlayer;
+		if ((!this.minecraft.isGamePaused()) && (this.minecraft.player != null)) {
+			this.player = this.minecraft.player;
 			
 			if(ModAutoFish.config_autoadv_enable)
 			{
 				if(nextAdvetist == 0L)
 				{
-					nextAdvetist = this.minecraft.theWorld.getTotalWorldTime() + 10 * 60 * 20;//!< 600 seconds later
+					nextAdvetist = this.minecraft.world.getTotalWorldTime() + 10 * 60 * 20;//!< 600 seconds later
 				}
 				else
 				{
-					this.minecraft.theWorld.getWorldTime();
-					long cur_time = this.minecraft.theWorld.getTotalWorldTime();
+					this.minecraft.world.getWorldTime();
+					long cur_time = this.minecraft.world.getTotalWorldTime();
 					
 					if (cur_time < 1000 && this.nextAdvetist >= 192000L) {
 						this.nextAdvetist = cur_time + ADV_READY_TICK_DELAY;
@@ -104,22 +104,22 @@ public class AutoFishEventHandler {
 						switch(lastAdVIndex){
 						default:
 						case 0:
-							this.minecraft.thePlayer.sendChatMessage(msg1);
+							this.minecraft.player.sendChatMessage(msg1);
 							break;
 							
 						case 1:
-							this.minecraft.thePlayer.sendChatMessage(msg2);
+							this.minecraft.player.sendChatMessage(msg2);
 							break;
 							
 						case 2:
-							this.minecraft.thePlayer.sendChatMessage(msg3);
+							this.minecraft.player.sendChatMessage(msg3);
 							break;
 						case 3:
-							this.minecraft.thePlayer.sendChatMessage(msg4);
+							this.minecraft.player.sendChatMessage(msg4);
 							break;
 							
 						case 4:
-							this.minecraft.thePlayer.sendChatMessage(msg5);
+							this.minecraft.player.sendChatMessage(msg5);
 							break;
 //							
 //						case 5:
@@ -160,14 +160,14 @@ public class AutoFishEventHandler {
 			if (ModAutoFish.config_autostone_enable) {
 				if(lastPickAxe == 0)
 				{
-					this.lastPickAxe = this.minecraft.theWorld.getTotalWorldTime();
+					this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
 					pickaxe_enable = false;
 					return;
 				}
 				
 				if(pickaxe_enable)
 				{
-					long cur_pickaxe = this.minecraft.theWorld.getTotalWorldTime();
+					long cur_pickaxe = this.minecraft.world.getTotalWorldTime();
 					
 					if (cur_pickaxe < 1000 && this.lastPickAxe >= 192000L) {
 						this.lastPickAxe = cur_pickaxe;
@@ -176,7 +176,7 @@ public class AutoFishEventHandler {
 					if(cur_pickaxe - this.lastPickAxe >= PICKAXE_ACTION_DELAY1)
 					{
 						stopUsePickAxe();
-						this.lastPickAxe = this.minecraft.theWorld.getTotalWorldTime();
+						this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
 						pickaxe_enable = false;
 						
 						//AutoFishLogger.log(Level.INFO, "player stop pickaxe ... %d", this.lastPickAxe);
@@ -190,14 +190,14 @@ public class AutoFishEventHandler {
 						else
 						{
 							stopUsePickAxe();
-							this.lastPickAxe = this.minecraft.theWorld.getTotalWorldTime();
+							this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
 							pickaxe_enable = false;
 						}
 					}
 				}
 				else
 				{
-					long cur_pickaxe = this.minecraft.theWorld.getTotalWorldTime();
+					long cur_pickaxe = this.minecraft.world.getTotalWorldTime();
 					if (cur_pickaxe < 1000 && this.lastPickAxe >= 192000L) {
 						this.lastPickAxe = cur_pickaxe;
 					}
@@ -205,7 +205,7 @@ public class AutoFishEventHandler {
 					if(cur_pickaxe - this.lastPickAxe > PICKAXE_ACTION_DELAY2)
 					{
 						tryToSwitchPickAxe();
-						this.lastPickAxe = this.minecraft.theWorld.getTotalWorldTime();
+						this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
 						pickaxe_enable = true;
 						
 						//AutoFishLogger.log(Level.INFO, "player start using pickaxe ... %d", this.lastPickAxe);
@@ -228,14 +228,14 @@ public class AutoFishEventHandler {
 					
 					if(lastCastAt != 0)
 					{
-						long tick = this.minecraft.theWorld.getTotalWorldTime();
+						long tick = this.minecraft.world.getTotalWorldTime();
 						long diff = tick - lastCastAt;
 						AutoFishLogger.log(Level.INFO, "[2]player Reeling : timestamp = %d, %f seconds", 
 								tick, diff/20.0f/*, this.minecraft.theWorld.getSeed()*/);
 					}else
 					{
 						AutoFishLogger.log(Level.INFO, "[2]player Reeling : timestamp = %d tick", 
-								this.minecraft.theWorld.getTotalWorldTime());
+								this.minecraft.world.getTotalWorldTime());
 					}
 					// !< Reel !
 					playerUseRod();
@@ -278,9 +278,9 @@ public class AutoFishEventHandler {
 						}
 
 						if (playerCanCast()) {
-							AutoFishLogger.log(Level.INFO, "[1]player Use Rod : timestamp =  %d", this.minecraft.theWorld.getTotalWorldTime());
+							AutoFishLogger.log(Level.INFO, "[1]player Use Rod : timestamp =  %d", this.minecraft.world.getTotalWorldTime());
 							playerUseRod();
-							lastCastAt = this.minecraft.theWorld.getTotalWorldTime();
+							lastCastAt = this.minecraft.world.getTotalWorldTime();
 						}
 
 						// Resetting these values is not strictly necessary, but
@@ -319,7 +319,7 @@ public class AutoFishEventHandler {
 
 							AutoFishLogger.log(Level.INFO, "Player Eat Fail ...");
 
-							this.lastEatFoodAt = this.minecraft.theWorld.getTotalWorldTime();
+							this.lastEatFoodAt = this.minecraft.world.getTotalWorldTime();
 
 							if (!playerIsHoldingRod()) {
 								tryToSwitchRods();
@@ -331,7 +331,7 @@ public class AutoFishEventHandler {
 				{
 					if(lastCastAt != 0)
 					{
-						long cur = this.minecraft.theWorld.getTotalWorldTime();
+						long cur = this.minecraft.world.getTotalWorldTime();
 						if (cur + 1000 < this.lastCastAt) {
 							//AutoFishLogger.log(Level.INFO, "WARNING: current %d, lastCastAt = %d ...", cur, lastCastAt);
 							cur += 192000L;
@@ -359,7 +359,7 @@ public class AutoFishEventHandler {
 							{
 								AutoFishLogger.log(Level.INFO, "Timeout Recover: cast fish-rod ...");
 								playerUseRod();
-								lastCastAt = this.minecraft.theWorld.getTotalWorldTime();
+								lastCastAt = this.minecraft.world.getTotalWorldTime();
 							}
 
 							return;
@@ -550,7 +550,7 @@ public class AutoFishEventHandler {
 	}
 
 	private void scheduleNextCast() {
-		this.castScheduledAt = this.minecraft.theWorld.getTotalWorldTime();
+		this.castScheduledAt = this.minecraft.world.getTotalWorldTime();
 	}
 
 	/*
@@ -558,7 +558,7 @@ public class AutoFishEventHandler {
 	 * which can persist for 2-3 ticks.
 	 */
 	private void startReelDelay() {
-		this.startedReelDelayAt = this.minecraft.theWorld.getTotalWorldTime();
+		this.startedReelDelayAt = this.minecraft.world.getTotalWorldTime();
 	}
 
 	private void resetReelDelay() {
@@ -571,7 +571,7 @@ public class AutoFishEventHandler {
 //	}
 
 	private boolean isDuringReelDelay() {
-		return (this.startedReelDelayAt != 0 && this.minecraft.theWorld
+		return (this.startedReelDelayAt != 0 && this.minecraft.world
 				.getTotalWorldTime() < this.startedReelDelayAt
 				+ REEL_TICK_DELAY);
 	}
@@ -673,14 +673,16 @@ public class AutoFishEventHandler {
 			return null;
 		} else {
 			return this.minecraft.getIntegratedServer().getEntityWorld()
-					.getPlayerEntityByName(this.minecraft.thePlayer.getName());
+					.getPlayerEntityByName(this.minecraft.player.getName());
 		}
 	}
 
 	private EnumActionResult playerUseRod() {
 		return this.minecraft.playerController.processRightClick(this.player,
-				this.minecraft.theWorld, this.player.getHeldItemMainhand(),
-				EnumHand.MAIN_HAND);
+				this.minecraft.world, EnumHand.MAIN_HAND);
+		//return this.minecraft.playerController.processRightClick(this.player,
+		//		this.minecraft.world, this.player.getHeldItemMainhand(),
+		//		EnumHand.MAIN_HAND);
 	}
 
 	// !< XXX
@@ -707,8 +709,9 @@ public class AutoFishEventHandler {
 	
 	private void tryToSwitchPickAxe() {
 		InventoryPlayer inventory = this.player.inventory;
-		for (int i = 0; i < 8/*9*/; i++) {
-			ItemStack curItemStack = inventory.mainInventory[i];
+		for (int i = 0; i < 9; i++) {
+			ItemStack curItemStack = inventory.getStackInSlot(i);
+			//ItemStack curItemStack = inventory.mainInventory[i];
 			if (curItemStack != null && curItemStack.getItem() == Items.STONE_PICKAXE
 					&& (curItemStack.getMaxDamage() - curItemStack.getItemDamage() > AUTOFISH_BREAKPREVENT_THRESHOLD)) 
 			{
@@ -762,7 +765,7 @@ public class AutoFishEventHandler {
 	
 	private boolean isTimeToCast() {
 		return (this.castScheduledAt != 0 
-				&& this.minecraft.theWorld.getTotalWorldTime() > this.castScheduledAt + CAST_QUEUE_TICK_DELAY);
+				&& this.minecraft.world.getTotalWorldTime() > this.castScheduledAt + CAST_QUEUE_TICK_DELAY);
 	}
 
 //	private boolean isFishingTimeout() {
@@ -779,8 +782,9 @@ public class AutoFishEventHandler {
 
 	private void tryToSwitchRods() {
 		InventoryPlayer inventory = this.player.inventory;
-		for (int i = 0; i < 8/*9*/; i++) {
-			ItemStack curItemStack = inventory.mainInventory[i];
+		for (int i = 0; i < 9; i++) {
+			ItemStack curItemStack = inventory.getStackInSlot(i);
+			//ItemStack curItemStack = inventory.mainInventory[i];
 			if (curItemStack != null
 					&& curItemStack.getItem() == Items.FISHING_ROD
 					&& (!ModAutoFish.config_autofish_preventBreak || (curItemStack.getMaxDamage() - curItemStack.getItemDamage() > AUTOFISH_BREAKPREVENT_THRESHOLD))) {
@@ -798,8 +802,9 @@ public class AutoFishEventHandler {
 	private boolean tryToSwitchFood() {
 		int health = 0;
 		InventoryPlayer inventory = this.player.inventory;
-		for (int i = 0; i < 8/*9*/; i++) {
-			ItemStack curItemStack = inventory.mainInventory[i];
+		for (int i = 0; i < 9; i++) {
+			ItemStack curItemStack = inventory.getStackInSlot(i);
+			//ItemStack curItemStack = inventory.mainInventory[i];
 			health = getItemFoodHealth(curItemStack);
 			if (health > 0) {
 				inventory.currentItem = i;
