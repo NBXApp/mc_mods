@@ -27,7 +27,7 @@ public class KeyInputHandler {
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         if (this.options.isPressed()) {
-            EntityPlayer player = Minecraft.getMinecraft().player;
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             if (playerIsHoldingFishingRod(player)) {
                 Minecraft.getMinecraft().displayGuiScreen(new AutoFishConfigGui(Minecraft.getMinecraft().currentScreen));
             }
@@ -38,12 +38,12 @@ public class KeyInputHandler {
     	
     	if(!Minecraft.getMinecraft().isGamePaused())
     	{
-    		if(player != null && player.getHeldItemMainhand() != null)
+    		if(player != null && player.getHeldItem() != null)
     		{
-    			Item item = player.getHeldItemMainhand().getItem();
-    			if(item == Items.FISHING_ROD 
-    					|| item == Items.STONE_PICKAXE 
-    					|| item == Items.IRON_PICKAXE)
+    			Item item = player.getHeldItem().getItem();
+    			if(item == Items.fishing_rod 
+    					|| item == Items.stone_pickaxe 
+    					|| item == Items.iron_pickaxe)
     			{
     				return true;
     			}
