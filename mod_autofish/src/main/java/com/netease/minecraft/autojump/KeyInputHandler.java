@@ -20,7 +20,7 @@ public class KeyInputHandler {
     }
     
     public void init() {
-        options = new KeyBinding("key.options", Keyboard.KEY_V, "key.categories.mod_autojump");
+        options = new KeyBinding("key.options", Keyboard.KEY_O, "key.categories.mod_autofish");
         ClientRegistry.registerKeyBinding(options);
     }
     
@@ -35,32 +35,26 @@ public class KeyInputHandler {
     }
 
     private boolean playerIsHoldingFishingRod(EntityPlayer player) {
-    	
-    	if(!Minecraft.getMinecraft().isGamePaused())
-    	{
-    		if(player != null && player.getHeldItemMainhand() != null)
-    		{
-    			Item item = player.getHeldItemMainhand().getItem();
-    			if(item == Items.FISHING_ROD 
-    					|| item == Items.STONE_PICKAXE 
-    					|| item == Items.IRON_PICKAXE)
-    			{
-    				return true;
-    			}
-    		}
-    	}
-    	
-    	return false;
-    	
-    	/*
-        return (!Minecraft.getMinecraft().isGamePaused()
+
+        if(!Minecraft.getMinecraft().isGamePaused()
                 && player != null
-                && player.getHeldItemMainhand() != null
-                && (player.getHeldItemMainhand().getItem() == Items.FISHING_ROD 
-                || player.getHeldItemMainhand().getItem() == Items.STONE_PICKAXE)
-                
-        		);
-        		*/
+                && player.getHeldItemMainhand() != null){
+        	Item item = player.getHeldItemMainhand().getItem();
+            if(item == Items.FISHING_ROD
+                    || item == Items.IRON_PICKAXE
+                    || item == Items.STONE_PICKAXE
+                    || item == Items.DIAMOND_PICKAXE){
+                return true;
+            }
+        }
+
+        return false;
+
+//        return (!Minecraft.getMinecraft().isGamePaused()
+//                && player != null
+//                && player.getHeldItemMainhand() != null
+//                && player.getHeldItemMainhand().getItem() == Items.FISHING_ROD);
     }
+
     
 }
