@@ -31,7 +31,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12-1.4"
+version = "1.12-1.5"
 group= "com.netease.minecraft.autojump" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "mod_autojump_forge"
 

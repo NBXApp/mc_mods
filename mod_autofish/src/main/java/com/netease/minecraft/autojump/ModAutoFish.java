@@ -27,6 +27,9 @@ public class ModAutoFish {
     public static boolean config_autostone_enable;
     public static final boolean CONFIG_DEFAULT_AUTOSTONE_ENABLE = false;
     
+    public static boolean config_autofast_stone_enable;
+    public static final boolean CONFIG_DEFAULT_AUTOFAST_STONE_ENABLE = false;
+    
     @SidedProxy(clientSide="com.netease.minecraft.autojump.ClientProxy", serverSide="com.netease.minecraft.autojump.ServerProxy")
     public static CommonProxy proxy;
     
@@ -64,8 +67,11 @@ public class ModAutoFish {
                 CONFIG_DEFAULT_AUTOFISH_RECASTDELAY, 1, 10, "Time (in seconds) to wait before automatically re-casting. Increase this value if server lag causes re-casting to fail.");
 
         config_autostone_enable = configFile.getBoolean("Enable AutoStonePick", Configuration.CATEGORY_GENERAL,
-                CONFIG_DEFAULT_AUTOFISH_ENABLE, "Automatically Stone.");
+        		CONFIG_DEFAULT_AUTOSTONE_ENABLE, "Automatically Stone.");
 
+        config_autofast_stone_enable = configFile.getBoolean("Enable AutoFastStonePick", Configuration.CATEGORY_GENERAL,
+        		CONFIG_DEFAULT_AUTOSTONE_ENABLE, "Automatically Fast-Stone.");
+        
         if (configFile.hasChanged()) {
             configFile.save();
         }

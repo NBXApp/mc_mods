@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -60,12 +62,113 @@ public class AutoFishEventHandler {
     private long lastPickAxe = 0L;
     private boolean pickaxe_enable = true;
     
+    //!<-----------------------------------------------------------------------
+    
+	private static final int MODE_STONE = 1;
+	private static final int MODE_STONE_FOOD = 2;
+	
+	private boolean isFoodEating = false;
+    private int foodTick = 0;
+	private int lastFoodHealth = 8;
+    
     public AutoFishEventHandler() {
         this.minecraft = FMLClientHandler.instance().getClient();
     }
     
     @SubscribeEvent
     public void onClientTickEvent(ClientTickEvent event) {
+    	
+        //!< XXX auto pick stone.
+        if (ModAutoFish.config_autofast_stone_enable 
+        		&& !this.minecraft.isGamePaused() && this.minecraft.player != null) {
+        	this.player = this.minecraft.player;
+        	
+            if(lastPickAxe == 0)
+            {
+                this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
+                pickaxe_enable = false;
+                AutoFishLogger.log(Level.INFO, "player stop pickaxe[1] ... %d", this.lastPickAxe);
+                return;
+            }
+
+            if(pickaxe_enable)
+            {
+                long cur_pickaxe = this.minecraft.world.getTotalWorldTime();
+
+                if (cur_pickaxe < 1000 && this.lastPickAxe >= 192000L) {
+                    this.lastPickAxe = cur_pickaxe;
+                }
+
+                if(cur_pickaxe - this.lastPickAxe >= 40) //!< 
+                {
+                    stopUsePickAxe();
+                    this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
+                    pickaxe_enable = false;
+
+                    AutoFishLogger.log(Level.INFO, "player stop pickaxe[2] ... %d", this.lastPickAxe);
+                }
+                else
+                {
+                    if(playerCanUserPickAxe())
+                    {
+                        tryUsingPickAxe();
+                    }
+                    else
+                    {
+                        stopUsePickAxe();
+                        this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
+                        pickaxe_enable = false;
+                        AutoFishLogger.log(Level.INFO, "player stop pickaxe[3] ... %d", this.lastPickAxe);
+                    }
+                }
+            }
+            else
+            {
+            	
+            	if(isFoodEating){
+            		if (this.player.getFoodStats().getFoodLevel() >= 18) {
+            			isFoodEating = false;
+            			RightKeyReset();
+            			return;
+            		}
+            		
+					if (tryToSwitchFood() == true) {
+						AutoFishLogger.log(Level.INFO,	"player try to eat ..., lastFoodHealth = " 	+ lastFoodHealth);
+						RightKeyRepeat();
+
+						return;
+					} else {
+						isFoodEating = false;
+						AutoFishLogger.log(Level.INFO, "WARNING: player no food to eat ...");
+					}
+            		
+            		return;
+            	}else{
+            		if (this.player.getFoodStats().getFoodLevel() <= 12) {
+            			isFoodEating = true;
+            			return;
+            		}
+            	}
+				
+            	
+                long cur_pickaxe = this.minecraft.world.getTotalWorldTime();
+                if (cur_pickaxe < 1000 && this.lastPickAxe >= 192000L) {
+                    this.lastPickAxe = cur_pickaxe;
+                }
+
+                if(cur_pickaxe - this.lastPickAxe > 10)//!< 35 --> 5
+                {
+                    tryToSwitchPickAxe();
+                    this.lastPickAxe = this.minecraft.world.getTotalWorldTime();
+                    pickaxe_enable = true;
+
+                    AutoFishLogger.log(Level.INFO, "player start using pickaxe ... %d", this.lastPickAxe);
+                }
+            }
+            return;
+        }
+        
+        
         //!< XXX auto pick stone.
         if (ModAutoFish.config_autostone_enable 
         		&& !this.minecraft.isGamePaused() && this.minecraft.player != null) {
@@ -383,6 +486,45 @@ public class AutoFishEventHandler {
                 this.minecraft.world, 
                 EnumHand.MAIN_HAND);
     }
+    
+	private boolean tryToSwitchFood() {
+		int health = 0;
+		InventoryPlayer inventory = this.player.inventory;
+		for (int i = 0; i < 8/*9*/; i++) {
+			//ItemStack curItemStack = inventory.mainInventory[i];
+			ItemStack curItemStack = inventory.getItemStack();
+			health = getItemFoodHealth(curItemStack);
+			if (health > 0) {
+				inventory.currentItem = i;
+				lastFoodHealth = health;
+				this.player.setHeldItem(EnumHand.MAIN_HAND, curItemStack);
+				AutoFishLogger.log(Level.INFO,
+						"try To Switch Food, currentItem = " + inventory.currentItem + ", FoodHealth = " + health);
+				return true;
+			}
+		}
+
+		AutoFishLogger.log(Level.INFO, "WARNING: Switch food fail...");
+		return false;
+	}
+	
+	private int getItemFoodHealth(ItemStack itemStack) {
+		Item item = itemStack.getItem();
+
+		if (itemStack.getItem() == Items.FISH) {
+			return 0;
+		}
+
+		if (item instanceof ItemFood) {
+			ItemFood food = (ItemFood) item;
+
+			if (food.getHealAmount(itemStack) >= 4) {
+				return food.getHealAmount(itemStack);
+			}
+		}
+
+		return 0;
+	}
 
 
     private void tryToSwitchPickAxe() {
@@ -448,6 +590,32 @@ public class AutoFishEventHandler {
 		}
 
 		return false;
+	}
+	
+    private boolean RightKeyRepeat() {
+    	this.player = this.minecraft.player;
+        if(this.player == null){
+        	return false;
+        }
+
+        ItemStack heldItem = this.player.getHeldItemMainhand();
+        if (heldItem != null) {
+
+            int keyCode = this.minecraft.gameSettings.keyBindAttack.getKeyCode();
+
+            KeyBinding.setKeyBindState(keyCode, true);
+            KeyBinding.onTick(keyCode);
+
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+    
+	private EnumActionResult RightKeyReset() {
+		KeyBinding.unPressAllKeys();
+		return EnumActionResult.SUCCESS;
 	}
 
     // !< XXX
